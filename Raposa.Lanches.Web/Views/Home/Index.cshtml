@@ -1,0 +1,47 @@
+﻿@{
+    ViewData["Title"] = "Cardapio";
+}
+
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
+        <div class="page-section">
+            <h1 class="page-title">CARDÁPIO</h1>
+        </div>
+    </div>
+</div>
+
+<div class="content">
+    <div class="container" style="padding-top:10px; ">
+
+        <div class="row">
+
+            @foreach (var item in (List<LancheModel>)ViewBag.Lanches)
+            {
+                <div class="row" style="padding: 10px">
+
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                        <div class="dish-img"><a href="#"> <img src="~/images/70x70.png" alt="lanche" class="img-circle"></a></div>
+                    </div>
+
+                    <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+                        <div class="dish-content">
+
+                            <h5 class="dish-title"><a href="#">@item.Nome</a></h5>
+
+                            <span class="dish-meta">
+                                @foreach (var ingrediente in item.LancheIngredientes)
+                                {
+                                    @string.Concat(ingrediente.Ingrediente.Nome, "; ")}
+                            </span>
+
+                            <div class="dish-price">
+                                <p>R$ @item.LancheIngredientes.Sum(x => x.Ingrediente.Valor)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>
