@@ -45,6 +45,14 @@ namespace Raposa.Lanches.API.Controllers
             return result;
         }
 
+
+        [HttpPut]
+        public void Update(IngredienteModel ingrediente)
+        {
+            _service.UpdateIngrediente(ingrediente);
+           
+        }
+
     }
 
 }

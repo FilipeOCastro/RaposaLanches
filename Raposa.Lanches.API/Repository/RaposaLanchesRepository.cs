@@ -14,7 +14,7 @@ namespace Raposa.Lanches.API.Repository
         public RaposaLanchesRepository(RaposaLanchesContext context)
         {
             _context = context;
-        }      
+        }
 
         public List<Ingrediente> GetAllIngredientes()
         {
@@ -55,6 +55,23 @@ namespace Raposa.Lanches.API.Repository
             var objDelete = _context.Lanches.Find(id);
             _context.Remove(objDelete);
 
+            _context.SaveChanges();
+        }
+
+        public void InsertIngredientes(int lancheID, int[] ingredientesIds)
+        {
+            if (ingredientesIds != null)
+            {
+                foreach (var item in ingredientesIds)
+                    _context.Add(new LancheIngrediente { LancheId = lancheID, IngredienteId = item });
+
+                _context.SaveChanges();
+            }            
+        }
+
+        public void UpdateIngrediente(Ingrediente ingredienteUpdate)
+        {            
+            _context.Update(ingredienteUpdate);
             _context.SaveChanges();
         }
     }

@@ -36,9 +36,28 @@ namespace Raposa.Lanches.Web.Controllers
 
         public IActionResult Create()
         {
+            _restRequest.Resource = "Ingrediente";
+            _restRequest.Method = Method.GET;
+
+            var response = _restClient.Execute<List<IngredienteModel>>(_restRequest);
+
+            ViewBag.Ingredientes = response.Data;
             return View();
+
         }
 
+        [HttpPost]
+        public IngredienteModel AdicionarIngrediente(int id)
+        {
+            _restRequest.Resource = "Ingrediente";
+            _restRequest.Method = Method.GET;
+
+            var response = _restClient.Execute<List<IngredienteModel>>(_restRequest);
+
+            return response.Data.Where(p => p.ID == id).Single();
+        }
+        
+      
         public ActionResult Delete(int ID)
         {
             try
@@ -46,7 +65,7 @@ namespace Raposa.Lanches.Web.Controllers
                 _restRequest.Resource = $"Home/{ID}";
                 _restRequest.Method = Method.DELETE;
 
-                var response = _restClient.Execute(_restRequest);
+                _restClient.Execute(_restRequest);
                 return RedirectToAction(nameof(Index));
 
             }
@@ -66,7 +85,7 @@ namespace Raposa.Lanches.Web.Controllers
 
                 _restRequest.AddJsonBody(lanche);
 
-                var response = _restClient.Execute(_restRequest);
+                _restClient.Execute(_restRequest);
                 return RedirectToAction(nameof(Index));
 
             }

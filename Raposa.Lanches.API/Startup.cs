@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -32,8 +33,19 @@ namespace Raposa.Lanches.API
             services.AddControllers();
 
             services.AddMvc();
+            services.AddEntityFrameworkSqlServer();
+            services.AddEntityFrameworkProxies();
 
-            services.AddTransient<RaposaLanchesContext>();
+            services.AddDbContextPool<RaposaLanchesContext>((optionsBuilder) =>
+            {
+                optionsBuilder.UseLazyLoadingProxies().UseSqlServer(
+
+             Configuration["ConnectionString:Default"],
+             b =>
+             b.MigrationsAssembly("Raposa.Lanches.DataBase")
+             );
+
+            });
             services.AddTransient<IRepository, RaposaLanchesRepository>();
             services.AddTransient<IService, RaposaLancheService>();
 
@@ -43,33 +55,33 @@ namespace Raposa.Lanches.API
                 cfg.CreateMap<Lanche, LancheModel>();
                 cfg.CreateMap<Ingrediente, IngredienteModel>();
 
-                cfg.CreateMap<IngredienteModel,Ingrediente>();
-                cfg.CreateMap<LancheModel,Lanche>();
+                cfg.CreateMap<IngredienteModel, Ingrediente>();
+                cfg.CreateMap<LancheModel, Lanche>();
 
                 cfg.CreateMap<LancheIngrediente, LancheIngredienteModel>();
             });
-
             IMapper mapper = config.CreateMapper();
             services.AddSingleton(mapper);
         }
-
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
+
+            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            { 
+                var context = serviceScope.ServiceProvider.GetRequiredService<RaposaLanchesContext>();
+                context.Database.Migrate();
+             }
         }
     }
 }

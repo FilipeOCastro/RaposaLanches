@@ -11,8 +11,12 @@ namespace Raposa.Lanches.API.Interfaces
         public List<Lanche> GetAllLanches();
         public Lanche InsertLanchee(Lanche lanche);
         public void DeleteLanche(int id);
+
+        public void InsertIngredientes(int lancheID, int[] ingredientesIds);     
+        
         public List<Ingrediente> GetAllIngredientes();
         public Ingrediente InsertIngrediente(Ingrediente ingrediente);
+        public void UpdateIngrediente(Ingrediente ingrediente);
         public void DeleteIngrediente(int id);
     }
 }

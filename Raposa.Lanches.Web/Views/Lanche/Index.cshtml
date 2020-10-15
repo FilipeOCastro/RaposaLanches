@@ -18,6 +18,14 @@
             <th>
                 @Html.DisplayNameFor(model => model.Nome)
             </th>
+
+            <th>
+                Ingredientes
+            </th>
+
+            <th>
+               Valor
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -27,13 +35,23 @@
             <td>
                 @Html.DisplayFor(modelItem => item.ID)
             </td>
+
             <td>
                 @Html.DisplayFor(modelItem => item.Nome)
             </td>
+
             <td>
-                @*@Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |*@
-                @Html.ActionLink("Delete", "Delete", new {  id=item.ID  })
+                @foreach (var ingrediente in item.LancheIngredientes)
+                {
+                    @string.Concat(ingrediente.Ingrediente.Nome, "; ")
+                }
+            </td>
+            <td>
+                @item.LancheIngredientes.Sum(x => x.Ingrediente.Valor)
+            </td>
+            <td>
+                @*@Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |*@
+                @Html.ActionLink("Delete", "Delete", new { id = item.ID })
             </td>
         </tr>
 }

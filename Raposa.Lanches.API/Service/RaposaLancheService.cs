@@ -64,6 +64,8 @@ namespace Raposa.Lanches.API.Service
 
             var result = _repository.InsertLanchee(lanche);
 
+            _repository.InsertIngredientes(result.ID, lancheModel.IngredientesIds);
+
             return _mapper.Map<DataBase.Lanche,
                                           LancheModel>(result);
         }
@@ -71,6 +73,15 @@ namespace Raposa.Lanches.API.Service
         public void DeleteLanche(int id)
         {
             _repository.DeleteLanche(id);
+        }
+
+        public void UpdateIngrediente(IngredienteModel ingredienteModel)
+        {
+            var ingrediente = _mapper.Map<IngredienteModel,
+                                         DataBase.Ingrediente>(ingredienteModel);
+
+            _repository.UpdateIngrediente(ingrediente);
+           
         }
     }
 }

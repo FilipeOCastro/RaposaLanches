@@ -11,6 +11,7 @@ namespace Raposa.Lanches.Web.Models
         public int ID { get; set; }
         [Required]
         public string Nome { get; set; }       
+        public int[] IngredientesIds { get; set; }
         public List<LancheIngredienteModel> LancheIngredientes { get; set; }
     }
 }
