@@ -1,22 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Raposa.Lanches.API.Interfaces;
 using Raposa.Lanches.API.Model;
-using Raposa.Lanches.API.Repository;
 using Raposa.Lanches.API.Service;
+using Raposa.Lanches.API.Service.Handlers;
 using Raposa.Lanches.DataBase;
+using Raposa.Lanches.DataBase.Repostitories;
+using Raposa.Lanches.DataBase.Repostitories.EFCore;
 
 namespace Raposa.Lanches.API
 {
@@ -46,8 +40,12 @@ namespace Raposa.Lanches.API
              );
 
             });
-            services.AddTransient<IRepository, RaposaLanchesRepository>();
-            services.AddTransient<IService, RaposaLancheService>();
+
+            services.AddTransient<IIngredientesRepository, IngredientesRepository>();
+            services.AddTransient<ILanchesRepository, LanchesRepository>();
+
+            services.AddTransient<IIngredientesService, IngredientesService>();
+            services.AddTransient<ILanchesService, LanchesService>();
 
             //automapper
             var config = new AutoMapper.MapperConfiguration(cfg =>
@@ -78,10 +76,10 @@ namespace Raposa.Lanches.API
             });
 
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
-            { 
+            {
                 var context = serviceScope.ServiceProvider.GetRequiredService<RaposaLanchesContext>();
                 context.Database.Migrate();
-             }
+            }
         }
     }
 }
