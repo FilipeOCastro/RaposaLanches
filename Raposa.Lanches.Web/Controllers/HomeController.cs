@@ -31,7 +31,7 @@ namespace Raposa.Lanches.Web.Controllers
 
         public IActionResult Index()
         {           
-            _restRequest.Resource = "Home";
+            _restRequest.Resource = "Lanche";
             _restRequest.Method = Method.GET;
 
             var response = _restClient.Execute<List<LancheModel>>(_restRequest);

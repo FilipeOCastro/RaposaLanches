@@ -26,7 +26,7 @@ namespace Raposa.Lanches.Web.Controllers
 
         public IActionResult Index()
         {
-            _restRequest.Resource = "Home";
+            _restRequest.Resource = "Lanche";
             _restRequest.Method = Method.GET;
 
             var response = _restClient.Execute<List<LancheModel>>(_restRequest);
@@ -62,7 +62,7 @@ namespace Raposa.Lanches.Web.Controllers
         {
             try
             {
-                _restRequest.Resource = $"Home/{ID}";
+                _restRequest.Resource = $"Lanche/{ID}";
                 _restRequest.Method = Method.DELETE;
 
                 _restClient.Execute(_restRequest);
@@ -80,7 +80,7 @@ namespace Raposa.Lanches.Web.Controllers
         {
             try
             {
-                _restRequest.Resource = "Home";
+                _restRequest.Resource = "Lanche";
                 _restRequest.Method = Method.POST;
 
                 _restRequest.AddJsonBody(lanche);
